@@ -1,0 +1,37 @@
+body{
+  background-color: #EFECCA
+}
+h1{
+  color: #C03000;
+}
+h2{
+    color: #4BB5C1;
+}
+li{
+  display: inline-block;
+  list-style: none;
+  background-color: red;
+  border-style: solid;
+  border-color: #660000;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+li:hover{
+  background-color: #009900;
+}
+
+li:hover a{
+  background-color: #009900;
+  text-decoration: underline;
+}
+
+li a{
+  text-decoration: none;
+  color: white;
+
+}
+#contact{
+  color : #0000FF;
+}

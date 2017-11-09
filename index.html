@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="./css/bootstrap.min.css">
+  <title>Application collaborateurs</title>
+  <script src="./js/jquery-3.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"></script>
+<script src="./js/bootstrap.min.js"></script>
+<script>
+
+$(document).ready(function () {
+    $.get("http://localhost:8080/collaborateurs", function (donnee) {
+        var tableau = `<table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+          </tr>
+        </thead>
+        <tbody>`;
+        donnee.forEach((el) => {
+            tableau = tableau +
+                ` <tr><td><a onclick="selectionner('` + el.matricule + `')">`
+                + el.matricule +
+                `</a></td><td>`
+                + el.nom +
+                `</td><td>`
+                + el.prenom +
+                `</td></tr>`
+        })
+        tableau = tableau + `</tbody></table> `;
+        $('#premier-tableau').html(tableau);
+    });
+});
+
+    function selectionner(matricule){
+      $.get("http://localhost:8080/collaborateurs/"+matricule+"/banque", function(donnee){
+        $('#banque').val(donnee.banque);
+        $('#iban').val(donnee.iban);
+        $('#bic').val(donnee.bic);
+        $('#matricule').val(donnee.matricule);
+      });
+    }
+        function validate(){
+          var matricule
+            var URL = "http://localhost:8080/collaborateurs/"+$('#matricule').val()+"/banque";
+            var dataObject = { 'banque': $('#banque').val(), 'iban': $('#iban').val(),  'bic': $('#bic').val()};
+           $.ajax({
+               url: URL,
+               type: 'PUT',
+               data: JSON.stringify(dataObject),
+               contentType: 'application/json',
+           });
+        	}
+</script>
+</head>
+<body>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm"><h1>SGP - Saisie des coordonnées bancaires</h1></div>
+  </div>
+  <div class="row">
+    <!--Tableau liste des collaborateurs -->
+    <div class="col-sm" id="premier-tableau">
+    </div>
+    <!--Formulaires ajouter banques -->
+    <div class="col-sm">
+      <form id="form1">
+        <div class="form-group">
+          <label for="banque">Banque</label>
+          <input type="text" class="form-control" id="banque" aria-describedby="emailHelp" placeholder="Banques">
+        </div>
+        <div class="form-group">
+          <label for="bic">BIC</label>
+          <input type="text" class="form-control" id="bic" value="" placeholder="BIC">
+        </div>
+        <div class="form-group">
+          <label for="iban">IBAN</label>
+          <input type="text" class="form-control" id="iban" value="" placeholder="IBAN">
+        </div>
+        <input type="hidden" class="form-control" id="matricule" value="">
+        <button type="button" class="btn btn-primary" onclick="validate();" id="valider">Submit</button>
+      </form>
+    </div>
+  </div>
+</div>
+</body>
+</html>
